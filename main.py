@@ -53,9 +53,24 @@ if mode == 1:  # mode 1 - renaming files beginning
     path = input("Enter the path to the folder with the files you want names to to be changed.\n"
                  "The selected path will be opened.\n")
     os.startfile(path)
-    base = input("Enter the base name (rest of the files will be named basename+number.extension.\n"
-                 "For example for base name file, files will be named:\n"
-                 "file1.txt, file2.txt, file3.txt, etc.\n")
+
+    numbering_mode = 0
+    def numbering_select():
+        global numbering_mode
+        numbering_mode = input("You can use two syntaxes:\n"
+                               "1. basename+number.extension, example: file1.txt, file2.txt\n"
+                               "2. basename+(number).extension, example: file(1).txt, file(2).txt\n"
+                               "Please enter 1 or 2 to select mode.\n")
+        numbering_mode = int(numbering_mode)
+        if numbering_mode == 1 or numbering_mode == 2:
+            return True
+        else:
+            return False
+
+    while(True):
+        if numbering_select():
+            break
+    base = input("Enter the base name (rest of the files will be named basename+number.extension.\n")
     cont = "0"
     while cont != "Y" or cont != "y":
         print("Are you sure you want to continue? All the files in the", path, "directory will be renamed. Y/N")
@@ -66,11 +81,18 @@ if mode == 1:  # mode 1 - renaming files beginning
             break
         else:
             print("Wrong input.")
-    for i, file in enumerate(sorted(os.scandir(path), key=lambda t: t.stat().st_mtime)):
-        if file.is_file():
-            ext = get_extension(file.name)
-            os.rename(create_path(path, file.name), create_path(path, base + str(i) + ext))
+    if numbering_mode == 1:
+        for i, file in enumerate(sorted(os.scandir(path), key=lambda t: t.stat().st_mtime)):
+            if file.is_file():
+                ext = get_extension(file.name)
+                os.rename(create_path(path, file.name), create_path(path, base + str(i) + ext))
+    elif numbering_mode == 2:
+        for i, file in enumerate(sorted(os.scandir(path), key=lambda t: t.stat().st_mtime)):
+            if file.is_file():
+                ext = get_extension(file.name)
+                os.rename(create_path(path, file.name), create_path(path, base + '(' + str(i) + ')' + ext))
     print("File names in", path, "changed.\n")
+
     # mode 1 end
 if mode == 2:  # mode 2 - extension changing beggining
     path = input("Enter the path to the folder with the files you want extensions to to be changed.\n"

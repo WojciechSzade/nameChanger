@@ -1,6 +1,6 @@
 Features:
-1. Changing name of all the files in folder to a base name + number, keeping the original extension.
-2. Changing extensions of all files.
+1. Changing name of all the files in folder to a base name + number, keeping the original extension. DONE
+2. Changing extensions of all files. DONE
 3. Numbering in brackets (1) (2).
 4. Selecting files to be changed using system files explorer.
 5. Numbering the files sorted by creation date/size/alphabetical/reversed of any
