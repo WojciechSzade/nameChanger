@@ -59,6 +59,8 @@ print("mode =", mode, "numbering_mode =", numbering_mode)
 
 def mode_select():
     global mode
+    if mode == 1 or mode == 2:
+        return True
     mode = input("There are two available modes at this moment:\n"
                  "1. Changing name of every file in a chosen folder to predefined name + number,\n"
                  "2. Changing extension of every file in a chosen folder.\n"
@@ -82,6 +84,8 @@ if mode == 1:  # mode 1 - renaming files beginning
 
     def numbering_select():
         global numbering_mode
+        if numbering_mode == 1 or numbering_mode == 2:
+            return True
         numbering_mode = input("You can use two syntheses:\n"
                                "1. basename+number.extension, example: file1.txt, file2.txt\n"
                                "2. basename+(number).extension, example: file(1).txt, file(2).txt\n"
