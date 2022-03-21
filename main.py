@@ -27,10 +27,35 @@ def get_filename(name):
 
 # main
 
-mode = 0
 
 print("Welcome to the nameChanger app.\n")
+default_mode = 0
 
+
+def default_select():
+    global default_mode
+    default_mode = input("Would you like to use the default settings from the config.ini file or"
+                         " make every choice by yourself?\n"
+                         "Type 1 for default or 2 for personal settings\n")
+    default_mode = int(default_mode)
+    if default_mode == 1 or default_mode == 2:
+        return True
+    else:
+        return False
+
+while True:
+    if default_select():
+        break
+mode = 0
+numbering_mode = 0
+if default_mode == 1:
+    config = open("config.ini", "r")
+    temp = config.readline()
+    mode = int(temp[-2])
+    temp = config.readline()
+    numbering_mode = int(temp[-2])
+config.close()
+print("mode =", mode, "numbering_mode =", numbering_mode)
 
 def mode_select():
     global mode
@@ -45,7 +70,7 @@ def mode_select():
         return False
 
 
-while (True):
+while True:
     if mode_select():
         break
 # print(mode)
@@ -54,10 +79,10 @@ if mode == 1:  # mode 1 - renaming files beginning
                  "The selected path will be opened.\n")
     os.startfile(path)
 
-    numbering_mode = 0
+
     def numbering_select():
         global numbering_mode
-        numbering_mode = input("You can use two syntaxes:\n"
+        numbering_mode = input("You can use two syntheses:\n"
                                "1. basename+number.extension, example: file1.txt, file2.txt\n"
                                "2. basename+(number).extension, example: file(1).txt, file(2).txt\n"
                                "Please enter 1 or 2 to select mode.\n")
@@ -67,7 +92,8 @@ if mode == 1:  # mode 1 - renaming files beginning
         else:
             return False
 
-    while(True):
+
+    while (True):
         if numbering_select():
             break
     base = input("Enter the base name (rest of the files will be named basename+number.extension.\n")
