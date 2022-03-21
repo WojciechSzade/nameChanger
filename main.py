@@ -21,6 +21,10 @@ def get_extension(name):
     return name[name.rfind('.'):]
 
 
+def get_filename(name):
+    return name[:name.rfind('.')]
+
+
 # main
 
 mode = 0
@@ -54,7 +58,7 @@ if mode == 1:  # mode 1 - renaming files beginning
                  "file1.txt, file2.txt, file3.txt, etc.\n")
     cont = "0"
     while cont != "Y" or cont != "y":
-        print("Are you sure you want to continue? All the files in the ", path, " directory will be renamed. Y/N")
+        print("Are you sure you want to continue? All the files in the", path, "directory will be renamed. Y/N")
         cont = input()
         if cont == "N" or cont == "n":
             quit()
@@ -66,8 +70,28 @@ if mode == 1:  # mode 1 - renaming files beginning
         if file.is_file():
             ext = get_extension(file.name)
             os.rename(create_path(path, file.name), create_path(path, base + str(i) + ext))
-    print("File names in ", path, " changed.\n")
+    print("File names in", path, "changed.\n")
     # mode 1 end
-if mode == 2:   # mode 2 - extension changing beggining
-    print("mode 2 selected\n")
+if mode == 2:  # mode 2 - extension changing beggining
+    path = input("Enter the path to the folder with the files you want extensions to to be changed.\n"
+                 "The selected path will be opened.\n")
+    os.startfile(path)
+    ext = input("Enter the extension you want all the files in the selected path to have.\n"
+                "Skip the dot. ('jpg' for example)\n")
+    cont = "0"
+    while cont != "Y" or cont != "y":
+        print("Are you sure you want to continue? All the extensions of files in the", path,
+              "directory will be renamed. Y/N")
+        cont = input()
+        if cont == "N" or cont == "n":
+            quit()
+        elif cont == "Y" or cont == "y":
+            break
+        else:
+            print("Wrong input.")
+    for i, file in enumerate(sorted(os.scandir(path), key=lambda t: t.stat().st_mtime)):
+        if file.is_file():
+            filename = get_filename(file.name)
+            os.rename(create_path(path, file.name), create_path(path, filename + '.' + ext))
+    print("File extensions in", path, "changed.")
     # mode 2 end
