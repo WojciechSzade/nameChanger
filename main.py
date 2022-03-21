@@ -52,22 +52,6 @@ def select_mode(text, mode):
 
 print("Welcome to the nameChanger app.\n")
 default_mode = 0
-
-# def default_select():
-#     global default_mode
-#     default_mode = input("Would you like to use the default settings from the config.ini file or"
-#                          " make every choice by yourself?\n"
-#                          "Type 1 for default or 2 for personal settings\n")
-#     default_mode = int(default_mode)
-#     if default_mode == 1 or default_mode == 2:
-#         return True
-#     else:
-#         return False
-
-#
-# while True:
-#     if default_select():
-#         break
 text_default = "Would you like to use the default settings from the config.ini file or make every choice by " \
                "yourself?\nType 1 for default or 2 for personal settings\n "
 default_mode = select_mode(text_default, default_mode)
@@ -75,66 +59,54 @@ print(default_mode)
 
 main_mode = 0
 numbering_mode = 0
+zero_mode = 0
 if default_mode == 1:
     config = open("config.ini", "r")
     temp = config.readline()
-    display_settings = int(temp[-2])
+    display_settings = int(temp[17])
     temp = config.readline()
-    main_mode = int(temp[-2])
+    main_mode = int(temp[5])
     temp = config.readline()
-    numbering_mode = int(temp[-2])
+    numbering_mode = int(temp[15])
+    temp = config.readline()
+    zero_mode = int(temp[10])
     config.close()
     print("Default settings loaded.\n")
     if display_settings == 1:
         if main_mode == 1:
-            print("Selected mode: Name Changer\n")
+            print("Selected mode: Name Changer.\n")
         elif main_mode == 2:
-            print("Selected mode: Extension Changer\n")
+            print("Selected mode: Extension Changer.\n")
         elif main_mode == 0:
             print("Mode not selected.\n")
         if numbering_mode == 1:
-            print("Selected numbering mode: Just numbers\n")
+            print("Selected numbering mode: Just numbers.\n")
         elif numbering_mode == 2:
-            print("Selected numbering mode: Numbers in brackets\n")
+            print("Selected numbering mode: Numbers in brackets.\n")
         elif numbering_mode == 0:
             print("Numbering mode not selected\n")
-
-# print("main_mode =", main_mode, "numbering_mode =", numbering_mode) debug
-
-
-# def main_mode_select():
-#     global main_mode
-#     if main_mode == 1 or main_mode == 2:
-#         return True
-#     main_mode = input("There are two available modes at this moment:\n"
-#                       "1. Changing name of every file in a chosen folder to predefined name + number,\n"
-#                       "2. Changing extension of every file in a chosen folder.\n"
-#                       "Please enter 1 or 2 to select mode.\n")
-#     main_mode = int(main_mode)
-#     if main_mode == 1 or main_mode == 2:
-#         return True
-#     else:
-#         return False
-#
-#
-# while True:
-#     if main_mode_select():
-#         break
-# print(main_mode)
+        if zero_mode == 1:
+            print("Counting from zero.\n")
+        elif zero_mode == 2:
+            print("Counting from one.\n")
+        elif zero_mode == 0:
+            print("Counting mode not selected.\n")
 text_main = "There are two available modes at this moment:\n1. Changing name of every file in a chosen folder to " \
             "predefined name + number,\n2. Changing extension of every file in a chosen folder.\nPlease enter 1 or 2 " \
             "to select mode.\n "
 main_mode = select_mode(text_main, main_mode)
 
 if main_mode == 1:  # main_mode 1 - renaming files beginning
-    path = input("Enter the path to the folder with the files you want names to to be changed.\n"
-                 "The selected path will be opened.\n")
-    os.startfile(path)
     text_numbering = "You can use two syntheses:\n" \
                      "1. basename+number.extension, example: file1.txt, file2.txt\n" \
                      "2. basename+(number).extension, example: file(1).txt, file(2).txt\n" \
                      "Please enter 1 or 2 to select mode.\n"
     numbering_mode = select_mode(text_numbering, numbering_mode)
+    text_zero = "Would you like to count from 0 or from 1?\nPlease enter 0 or 1.\n"
+    zero_mode = select_mode(text_zero, zero_mode) + 1
+    path = input("Enter the path to the folder with the files you want names to to be changed.\n"
+                 "The selected path will be opened.\n")
+    os.startfile(path)
     base = input("Enter the base name (rest of the files will be named basename+number.extension.\n")
     cont = "0"
     while cont != "Y" or cont != "y":
@@ -150,12 +122,12 @@ if main_mode == 1:  # main_mode 1 - renaming files beginning
         for i, file in enumerate(sorted(os.scandir(path), key=lambda t: t.stat().st_mtime)):
             if file.is_file():
                 ext = get_extension(file.name)
-                os.rename(create_path(path, file.name), create_path(path, base + str(i) + ext))
+                os.rename(create_path(path, file.name), create_path(path, base + str(i + zero_mode - 2) + ext))
     elif numbering_mode == 2:
         for i, file in enumerate(sorted(os.scandir(path), key=lambda t: t.stat().st_mtime)):
             if file.is_file():
                 ext = get_extension(file.name)
-                os.rename(create_path(path, file.name), create_path(path, base + '(' + str(i) + ')' + ext))
+                os.rename(create_path(path, file.name), create_path(path, base + '(' + str(i + zero_mode - 2) + ')' + ext))
     print("File names in", path, "changed.\n")
 
     # main_mode 1 end
