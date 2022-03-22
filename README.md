@@ -2,12 +2,12 @@
 A project of an app used to change many file names at once.  
 
 Existing features:
--Changing file names in a specific path, to base name with number (counting from zero/one, and brackets around the number selectable),
--Changing file extensions in a specific path,
--Config file with settings such as: file renaming/extension changer mode, brackets mode, counting mode,
--Can handle "file already exist" error*
-
-
+-Changing file names in a specific path, to base name with number (counting from zero/one, and brackets around the number selectable),  
+-Changing file extensions in a specific path,  
+-Config file with settings such as: file renaming/extension changer mode, brackets mode, counting mode,  
+-Can handle "file already exist" error*  
+  
+  
 List of planned features:  
 -Renaming a list of files, with a name + number/letter. Sorting by date of creation, size, alfabetical.  
 -Changing extensions of files.  
