@@ -26,6 +26,7 @@ def get_filename(name):
 
 
 global_mode = 0
+tempdir_exist = 0
 
 
 def select_mode_low(text, mode):
@@ -122,12 +123,32 @@ if main_mode == 1:  # main_mode 1 - renaming files beginning
         for i, file in enumerate(sorted(os.scandir(path), key=lambda t: t.stat().st_mtime)):
             if file.is_file():
                 ext = get_extension(file.name)
-                os.rename(create_path(path, file.name), create_path(path, base + str(i + zero_mode - 2) + ext))
+                try:
+                    os.rename(create_path(path, file.name), create_path(path, base + str(i + zero_mode - 2) + ext))
+                except OSError as error:
+                    tempdir = create_path(path, 'temp')
+                    if not os.path.exists(tempdir):
+                        os.mkdir(tempdir)
+                    os.rename(create_path(path, file.name), create_path(tempdir, base + str(i + zero_mode - 2) + ext))
+                    tempdir_exist = 1
     elif numbering_mode == 2:
         for i, file in enumerate(sorted(os.scandir(path), key=lambda t: t.stat().st_mtime)):
             if file.is_file():
                 ext = get_extension(file.name)
-                os.rename(create_path(path, file.name), create_path(path, base + '(' + str(i + zero_mode - 2) + ')' + ext))
+                try:
+                    os.rename(create_path(path, file.name), create_path(path, base + '(' + str(i + zero_mode - 2) + ')' + ext))
+                except OSError as error:
+                    tempdir = create_path(path, 'temp')
+                    if not os.path.exists(tempdir):
+                        os.mkdir(tempdir)
+                    os.rename(create_path(path, file.name), create_path(path, base + '(' + str(i + zero_mode - 2) + ')' + ext))
+                    tempdir_exist = 1
+    if tempdir_exist:
+        for i, file in enumerate(sorted(os.scandir(tempdir), key=lambda t: t.stat().st_mtime)):
+            if file.is_file():
+                ext = get_extension(file.name)
+                os.rename(create_path(tempdir, file.name), create_path(path, file.name))
+        os.rmdir(tempdir)
     print("File names in", path, "changed.\n")
 
     # main_mode 1 end
