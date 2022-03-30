@@ -11,3 +11,13 @@ t_zero = "Would you like to count from 0 or from 1?\nPlease enter 0 or 1.\n"
 t_path1 = "Enter the path to the folder with the files you want names to to be changed.\n The selected path will be " \
          "opened.\n "
 t_basename = "Enter the base name (rest of the files will be named basename+number.extension.\n"
+
+t_sort = "You can sort your files:\n" \
+         "1. By date of edition from the newest\n" \
+         "2. By date od edition from the oldest\n" \
+         "3. By name alphabetically from A to Z\n" \
+         "4. By name alphabetically from Z to A\n" \
+         "5. By size from the smallest: 5\n" \
+         "6. By size from the biggest: 6\n" \
+         "7. By type alphabetically (then by name) from A to Z\n" \
+         "8. By type alphabetically (then by name) from Z to A\n"
