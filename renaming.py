@@ -1,6 +1,6 @@
-import os
-from main import select_mode
 import text
+import os
+
 
 def create_path(*args):
     return '\\'.join(args)

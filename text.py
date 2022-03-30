@@ -17,7 +17,7 @@ t_sort = "You can sort your files:\n" \
          "2. By date od edition from the oldest\n" \
          "3. By name alphabetically from A to Z\n" \
          "4. By name alphabetically from Z to A\n" \
-         "5. By size from the smallest: 5\n" \
-         "6. By size from the biggest: 6\n" \
+         "5. By size from the smallest:\n" \
+         "6. By size from the biggest:\n" \
          "7. By type alphabetically (then by name) from A to Z\n" \
          "8. By type alphabetically (then by name) from Z to A\n"

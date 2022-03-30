@@ -19,15 +19,15 @@ mode = Mods(0, 0, 0, 0, 0, 0)
 # main
 
 print("Welcome to the nameChanger app.\n")
-mode.default = select_mode(text.t_default, mode.default)
+mode.default = select_mode(text.t_default, mode.default, 1, 2)
 if mode.default == 1:  # reading info from config.ini
-    mode.numbering = select_mode(text.t_numbering, mode.numbering)
-    mode.zero = select_mode(text.t_zero, mode.zero) + 1
-    mode.sort = select_mode_sort(text.t_sort, mode.sort, 8)
     readConfig(mode)
     print("Default settings loaded.\n")
     printConfig(mode)
-mode.main = select_mode(text.t_main, mode.main)
+mode.numbering = select_mode(text.t_numbering, mode.numbering, 1, 2)
+mode.zero = select_mode(text.t_zero, mode.zero, 0, 1) + 1
+mode.sort = select_mode(text.t_sort, mode.sort, 1, 8)
+mode.main = select_mode(text.t_main, mode.main, 1, 2)
 if mode.main == 1:  # mode.main 1 - renaming files beginning
     rename(mode)
     # mode.main 1 end
