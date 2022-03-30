@@ -14,8 +14,64 @@ def get_filename(name):
     return name[:name.rfind('.')]
 
 
+def selectKey(mode):
+    if mode.sort == 1 or mode.sort == 2:
+        return lambda t: t.stat().st_mtime
+    elif mode.sort == 5 or mode.sort == 6:
+        return lambda t: t.stat().st_size
+
+
+tempdir = 0
+tempdir_exist = 0
+rev = False
+
+
+def numberedRename1(mode, path, base, sort_key, rev):
+    global tempdir
+    global tempdir_exist
+    for i, file in enumerate(sorted(os.scandir(path), key=sort_key, reverse=rev)):
+        if file.is_file():
+            ext = get_extension(file.name)
+            try:
+                os.rename(create_path(path, file.name), create_path(path, base + str(i + mode.zero - 2) + ext))
+            except OSError as error:
+                tempdir = create_path(path, 'temp')
+                if not os.path.exists(tempdir):
+                    os.mkdir(tempdir)
+                os.rename(create_path(path, file.name), create_path(tempdir, base + str(i + mode.zero - 2) + ext))
+                tempdir_exist = 1
+
+
+def numberedRename2(mode, path, base, sort_key, rev):
+    global tempdir
+    global tempdir_exist
+    for i, file in enumerate(sorted(os.scandir(path), key=sort_key, reverse=rev)):
+        if file.is_file():
+            ext = get_extension(file.name)
+            try:
+                os.rename(create_path(path, file.name),
+                          create_path(path, base + '(' + str(i + mode.zero - 2) + ')' + ext))
+            except OSError as error:
+                tempdir = create_path(path, 'temp')
+                if not os.path.exists(tempdir):
+                    os.mkdir(tempdir)
+                os.rename(create_path(path, file.name),
+                          create_path(tempdir, base + '(' + str(i + mode.zero - 2) + ')' + ext))
+                tempdir_exist = 1
+
+
+def tempDirF(tempdir_exist, mode, path, base):
+    if tempdir_exist:
+        for i, file in enumerate(sorted(os.scandir(tempdir), key=lambda t: t.stat().st_mtime)):
+            if file.is_file():
+                ext = get_extension(file.name)
+                os.rename(create_path(tempdir, file.name), create_path(path, file.name))
+        os.rmdir(tempdir)
+
+
 def rename(mode):
-    tempdir_exist = 0
+    global tempdir_exist
+    global rev
     path = input(text.t_path1)
     os.startfile(path)
     base = input(text.t_basename)
@@ -29,38 +85,14 @@ def rename(mode):
             break
         else:
             print("Wrong input.")
+    sort_key = selectKey(mode)
+    if mode.sort%2 == 0:
+        rev = True
     if mode.numbering == 1:
-        for i, file in enumerate(sorted(os.scandir(path), key=lambda t: t.stat().st_mtime)):
-            if file.is_file():
-                ext = get_extension(file.name)
-                try:
-                    os.rename(create_path(path, file.name), create_path(path, base + str(i + mode.zero - 2) + ext))
-                except OSError as error:
-                    tempdir = create_path(path, 'temp')
-                    if not os.path.exists(tempdir):
-                        os.mkdir(tempdir)
-                    os.rename(create_path(path, file.name), create_path(tempdir, base + str(i + mode.zero - 2) + ext))
-                    tempdir_exist = 1
+        numberedRename1(mode, path, base, sort_key, rev)
     elif mode.numbering == 2:
-        for i, file in enumerate(sorted(os.scandir(path), key=lambda t: t.stat().st_mtime)):
-            if file.is_file():
-                ext = get_extension(file.name)
-                try:
-                    os.rename(create_path(path, file.name),
-                              create_path(path, base + '(' + str(i + mode.zero - 2) + ')' + ext))
-                except OSError as error:
-                    tempdir = create_path(path, 'temp')
-                    if not os.path.exists(tempdir):
-                        os.mkdir(tempdir)
-                    os.rename(create_path(path, file.name),
-                              create_path(path, base + '(' + str(i + mode.zero - 2) + ')' + ext))
-                    tempdir_exist = 1
-    if tempdir_exist:
-        for i, file in enumerate(sorted(os.scandir(tempdir), key=lambda t: t.stat().st_mtime)):
-            if file.is_file():
-                ext = get_extension(file.name)
-                os.rename(create_path(tempdir, file.name), create_path(path, file.name))
-        os.rmdir(tempdir)
+        numberedRename2(mode, path, base, sort_key, rev)
+    tempDirF(tempdir_exist, mode, path, base)
     print("File names in", path, "changed.\n")
 
 
