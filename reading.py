@@ -8,6 +8,8 @@ def readConfig(mode):
     mode.numbering = int(temp[15])
     temp = config.readline()
     mode.zero = int(temp[10])
+    temp = config.readline()
+    mode.sort = int(temp[10])
     config.close()
     return mode
 
