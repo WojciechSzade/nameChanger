@@ -19,6 +19,8 @@ def selectKey(mode):
         return lambda t: t.stat().st_mtime
     elif mode.sort == 5 or mode.sort == 6:
         return lambda t: t.stat().st_size
+    elif mode.sort == 3 or mode.sort == 4:
+        return lambda file: file.name
 
 
 tempdir = 0
@@ -60,9 +62,9 @@ def numberedRename2(mode, path, base, sort_key, rev):
                 tempdir_exist = 1
 
 
-def tempDirF(tempdir_exist, mode, path, base):
+def tempDirF(tempdir_exist, mode, path, base, sort_key):
     if tempdir_exist:
-        for i, file in enumerate(sorted(os.scandir(tempdir), key=lambda t: t.stat().st_mtime)):
+        for i, file in enumerate(sorted(os.scandir(tempdir), key=sort_key)):
             if file.is_file():
                 ext = get_extension(file.name)
                 os.rename(create_path(tempdir, file.name), create_path(path, file.name))
@@ -92,7 +94,7 @@ def rename(mode):
         numberedRename1(mode, path, base, sort_key, rev)
     elif mode.numbering == 2:
         numberedRename2(mode, path, base, sort_key, rev)
-    tempDirF(tempdir_exist, mode, path, base)
+    tempDirF(tempdir_exist, mode, path, base, sort_key)
     print("File names in", path, "changed.\n")
 
 
