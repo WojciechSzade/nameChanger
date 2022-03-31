@@ -21,6 +21,8 @@ def selectKey(mode):
         return lambda t: t.stat().st_size
     elif mode.sort == 3 or mode.sort == 4:
         return lambda file: file.name
+    elif mode.sort == 7 or  mode.sort == 8:
+        return lambda file: get_extension(file.name)
 
 
 tempdir = 0
