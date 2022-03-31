@@ -19,5 +19,5 @@ t_sort = "You can sort your files:\n" \
          "4. By name alphabetically from Z to A\n" \
          "5. By size from the smallest:\n" \
          "6. By size from the biggest:\n" \
-         "7. By type alphabetically (then by name) from A to Z\n" \
-         "8. By type alphabetically (then by name) from Z to A\n"
+         "7. By extension alphabetically from A to Z\n" \
+         "8. By extension alphabetically from Z to A\n"
