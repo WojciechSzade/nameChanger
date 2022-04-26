@@ -1,7 +1,10 @@
 # nameChanger
+
+Author: WojciechSzade  
+
 A project of an app used to change many file names at once.  
 
-Existing features:
+Existing features:  
 -Changing file names in a specific path, to base name with number (counting from zero/one, and brackets around the number selectable), sorted by date of creation/size/alphabetical/alphabetical by file extension/reversed of any,  
 -Changing file extensions in a specific path,  
 -Config file with settings such as: file renaming/extension changer mode, brackets mode, counting mode and more,  
