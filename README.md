@@ -20,6 +20,3 @@ List of planned features:
 
 
 *If a some of the files already uses basename+number syntax, standard os.rename method faced this error. My resolution is putting colliding files in a temporary directory.
-
-Photo of text version of nameChanger:
-![Selection of settings, a dialog window to choose a folder](https://www.upload.ee/image/14154541/nameChangerScreenshoot1.jpg)
