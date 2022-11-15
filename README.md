@@ -9,8 +9,9 @@ It can work in two mods: file name changing and file extension changing.
 In file name changing mode there is a bunch of settings to custom the name and numbering.  
 Those settings as well as the mode can be saved and loaded from the config.ini file. If you want to decide on something everytime set the thing value in config.ini to 0.  
 You can select settings during program runtime as well.  
-  
-  
+
+To run the app simply use python main.py when in the program directory.
+Only python3 is required.
   
   
   
