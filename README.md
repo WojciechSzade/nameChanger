@@ -1,5 +1,6 @@
 # nameChanger
-WARNING: This app does interfer with your personal files in the selected directory. It is not stable yet. You should always make a backup copy of files in directory you are gonna work in. ALWAYS DOUBLE CHECK THE SELECTED DIRECTORY!  
+WARNING: This app does interfer with your personal files in the selected directory. It is not stable yet. You should always make a backup copy of files in directory you are gonna work in. 
+  ALWAYS DOUBLE CHECK THE SELECTED DIRECTORY!  
 The app will work on every file in the directory you choose. It will ignore folders.  
 
 A simple python app used for changing a lot of file names at once.  
