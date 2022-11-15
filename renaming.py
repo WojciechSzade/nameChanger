@@ -1,9 +1,27 @@
+import random
+import string
 import text
 import os
 
+def ask_if_sure(path):
+    answ = input("Are you sure you want to continue? All the files in the " + str(path) + " directory will be renamed. Y/N\n")
+    answ = answ.lower()
+    if answ == "n":
+        quit()
+    elif answ == "y":
+        return True
+    else:
+        print("Wrong input. Enter Y or N. Try again.")
+        return ask_if_sure(path)
 
 def create_path(*args):
-    return '\\'.join(args)
+    return '/'.join(args)
+
+def create_name_argument(mode, i):
+    if mode.numbering == 1:
+         return str(i + mode.zero - 1)
+    elif mode.numbering == 2:
+        return '(' + str(i + mode.zero - 1) + ')'
 
 
 def get_extension(name):
@@ -25,99 +43,42 @@ def selectKey(mode):
         return lambda file: get_extension(file.name)
 
 
-tempdir = 0
-tempdir_exist = 0
-rev = False
-
-
-def numberedRename1(mode, path, base, sort_key, rev):
-    global tempdir
-    global tempdir_exist
-    for i, file in enumerate(sorted(os.scandir(path), key=sort_key, reverse=rev)):
+def tempDirF(mode, tempdir, sort_key):
+    for i, file in enumerate(sorted(os.scandir(tempdir), key=sort_key)):
         if file.is_file():
             ext = get_extension(file.name)
-            try:
-                os.rename(create_path(path, file.name), create_path(path, base + str(i + mode.zero - 2) + ext))
-            except OSError as error:
-                tempdir = create_path(path, 'temp')
-                if not os.path.exists(tempdir):
-                    os.mkdir(tempdir)
-                os.rename(create_path(path, file.name), create_path(tempdir, base + str(i + mode.zero - 2) + ext))
-                tempdir_exist = 1
-
-
-def numberedRename2(mode, path, base, sort_key, rev):
-    global tempdir
-    global tempdir_exist
-    for i, file in enumerate(sorted(os.scandir(path), key=sort_key, reverse=rev)):
-        if file.is_file():
-            ext = get_extension(file.name)
-            try:
-                os.rename(create_path(path, file.name),
-                          create_path(path, base + '(' + str(i + mode.zero - 2) + ')' + ext))
-            except OSError as error:
-                tempdir = create_path(path, 'temp')
-                if not os.path.exists(tempdir):
-                    os.mkdir(tempdir)
-                os.rename(create_path(path, file.name),
-                          create_path(tempdir, base + '(' + str(i + mode.zero - 2) + ')' + ext))
-                tempdir_exist = 1
-
-
-def tempDirF(tempdir_exist, mode, path, base, sort_key):
-    if tempdir_exist:
-        for i, file in enumerate(sorted(os.scandir(tempdir), key=sort_key)):
-            if file.is_file():
-                ext = get_extension(file.name)
-                os.rename(create_path(tempdir, file.name), create_path(path, file.name))
-        os.rmdir(tempdir)
+            os.rename(create_path(tempdir, file.name), create_path(mode.path, file.name))
+    os.rmdir(tempdir)
 
 
 def rename(mode):
-    global tempdir_exist
-    global rev
-    path = input(text.t_path1)
-    os.startfile(path)
+    tempdir = ""
     base = input(text.t_basename)
-    cont = "0"
-    while cont != "Y" or cont != "y":
-        print("Are you sure you want to continue? All the files in the", path, "directory will be renamed. Y/N")
-        cont = input()
-        if cont == "N" or cont == "n":
-            quit()
-        elif cont == "Y" or cont == "y":
-            break
-        else:
-            print("Wrong input.")
+    ask_if_sure(mode.path)
     sort_key = selectKey(mode)
     if mode.sort%2 == 0:
         rev = True
-    if mode.numbering == 1:
-        numberedRename1(mode, path, base, sort_key, rev)
-    elif mode.numbering == 2:
-        numberedRename2(mode, path, base, sort_key, rev)
-    tempDirF(tempdir_exist, mode, path, base, sort_key)
-    print("File names in", path, "changed.\n")
+    else:
+        rev = False
+    for i, file in enumerate(sorted(os.scandir(mode.path), key=sort_key, reverse=rev)):
+        if file.is_file():
+            ext = get_extension(file.name)
+            if tempdir == "":
+                tempdir = create_path(mode.path, 'temp' + str(random.randint(0, 999)) + str(random.randint(0, 999))) #creating a random name, so the directory doesn't already exist
+            if not os.path.exists(tempdir):
+                os.mkdir(tempdir)
+            os.rename(create_path(mode.path, file.name), create_path(tempdir, base + create_name_argument(mode, i) + ext))
+    if tempdir != "":
+        tempDirF(mode, tempdir, sort_key)
+    print("File names in", mode.path, "changed.\n")
 
 
 def changingExtensions(mode):
-    path = input()
-    os.startfile(path)
     ext = input("Enter the extension you want all the files in the selected path to have.\n"
                 "Skip the dot. ('jpg' for example)\n")
-    cont = "0"
-    while cont != "Y" or cont != "y":
-        print("Are you sure you want to continue? All the extensions of files in the", path,
-              "directory will be renamed. Y/N")
-        cont = input()
-        if cont == "N" or cont == "n":
-            quit()
-        elif cont == "Y" or cont == "y":
-            break
-        else:
-            print("Wrong input.")
-    for i, file in enumerate(sorted(os.scandir(path), key=lambda t: t.stat().st_mtime)):
+    ask_if_sure(mode.path)
+    for i, file in enumerate(sorted(os.scandir(mode.path), key=lambda t: t.stat().st_mtime)):
         if file.is_file():
             filename = get_filename(file.name)
-            os.rename(create_path(path, file.name), create_path(path, filename + '.' + ext))
-    print("File extensions in", path, "changed.")
+            os.rename(create_path(mode.path, file.name), create_path(mode.path, filename + '.' + ext))
+    print("File extensions in", mode.path, "changed.")
