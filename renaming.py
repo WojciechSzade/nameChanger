@@ -82,3 +82,20 @@ def changingExtensions(mode):
             filename = get_filename(file.name)
             os.rename(create_path(mode.path, file.name), create_path(mode.path, filename + '.' + ext))
     print("File extensions in", mode.path, "changed.")
+
+def changeCurrentName(mode):
+    tempdir = ""
+    phrase = input("Enter the phrase you want all the files in the selected path to have.\n")
+    ask_if_sure(mode.path)
+    for i, file in enumerate(sorted(os.scandir(mode.path), key=lambda t: t.stat().st_mtime)):
+        if file.is_file():
+            ext = get_extension(file.name)
+            if tempdir == "":
+                tempdir = create_path(mode.path, 'temp' + str(random.randint(0, 999)) + str(random.randint(0, 999))) #creating a random name, so the directory doesn't already exist
+            if not os.path.exists(tempdir):
+                os.mkdir(tempdir)
+            os.rename(create_path(mode.path, file.name), create_path(tempdir, get_filename(file.name) + phrase + ext))
+    if tempdir != "":
+        tempDirF(mode, tempdir, lambda t: t.stat().st_mtime)
+    print("File names in", mode.path, "changed.\n")
+    

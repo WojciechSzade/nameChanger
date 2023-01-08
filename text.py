@@ -1,7 +1,7 @@
 t_default = "Would you like to load the settings from the config.ini file or make every choice by " \
             "yourself?\nType 1 to load settings or 2 for personal settings\n "
 t_main = "There are two available modes at this moment:\n1. Changing name of every file in a chosen folder to " \
-         "predefined name + number,\n2. Changing extension of every file in a chosen folder.\nPlease enter 1 or 2 " \
+         "predefined name + number,\n2. Changing extension of every file in a chosen folder.\n3. Adding a phrase to every file name (currentname + constant phrase)\nPlease enter 1, 2 or 3 " \
          "to select mode.\n "
 t_numbering = "You can use two syntheses:\n" \
               "1. basename+number.extension, example: file1.txt, file2.txt\n" \

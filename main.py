@@ -24,7 +24,7 @@ class Mods:
             print(
                 "If some of the settings were 0 (not selected) or incorrect, you will be asked to select them now.")
         if self.main == 0:
-            self.main = self.select_mode(0, text.t_main, 1, 2)
+            self.main = self.select_mode(0, text.t_main, 1, 3)
         if self.main == 1:
             if self.sort == 0:
                 self.sort = self.select_mode(0, text.t_sort, 1, 8)
@@ -68,3 +68,5 @@ if mode.main == 1:  # mode.main 1 - renaming files beginning
     rename(mode)
 if mode.main == 2:  # mode.main 2 - extension changing beggining
     changingExtensions(mode)
+if mode.main == 3: # mode.main 3 - add something to current file name
+    changeCurrentName(mode)
